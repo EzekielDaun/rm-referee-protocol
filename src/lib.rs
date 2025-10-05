@@ -2,6 +2,7 @@
 
 extern crate alloc;
 use deku::deku_derive;
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 pub mod robot_interaction;
@@ -15,7 +16,8 @@ pub use frame::{FRAME_SOF, RM_CRC8, RM_CRC16, RefereeFrame, RefereeFrameHeader};
 mod types;
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(
     id_type = "u16",
     ctx = "header:Option<&RefereeFrameHeader>",
@@ -491,7 +493,8 @@ impl RefereeFrameCmdData {
 
 // 附录二：机器人 ID（u8 版本，用于 1 字节字段）
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8")]
 pub enum RobotID {
     // Red side 1...11
@@ -544,7 +547,8 @@ pub enum RobotID {
 
 // 附录二：端点 ID（u16 版本，包含机器人 ID、选手端 ID、服务器 ID）
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u16", endian = "little")]
 pub enum EndpointId {
     // Player Clients
@@ -577,7 +581,8 @@ pub enum EndpointId {
     Server = 0x8080,
 }
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8", bits = 4)]
 pub enum GameType {
     /// RoboMaster 机甲大师超级对抗赛
@@ -598,7 +603,8 @@ pub enum GameType {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8", bits = 4)]
 pub enum GameProgress {
     #[deku(id = "0")]
@@ -616,7 +622,8 @@ pub enum GameProgress {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8")]
 pub enum GameResult {
     #[deku(id = "0")]
@@ -628,7 +635,8 @@ pub enum GameResult {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8")]
 pub enum RefereeWarningLevel {
     #[deku(id = "1")]
@@ -642,7 +650,8 @@ pub enum RefereeWarningLevel {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 
 pub struct EventData {
     #[deku(bits = 1)]
@@ -669,7 +678,8 @@ pub struct EventData {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8", bits = 2)]
 pub enum OccupyType {
     #[deku(id = "0")]
@@ -683,7 +693,8 @@ pub enum OccupyType {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8", bits = 3)]
 pub enum DartTarget {
     #[deku(id = "0")]
@@ -699,7 +710,8 @@ pub enum DartTarget {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8", bits = 2)]
 pub enum DartSelectionTarget {
     #[deku(id = "0")]
@@ -713,7 +725,8 @@ pub enum DartSelectionTarget {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8", bits = 4)]
 pub enum HpDeductionReason {
     #[deku(id = "0")]
@@ -724,7 +737,8 @@ pub enum HpDeductionReason {
     ArmorCollision = 5,
 }
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8")]
 pub enum BulletType {
     #[deku(id = "1")]
@@ -734,7 +748,8 @@ pub enum BulletType {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8")]
 pub enum ShooterNumber {
     #[deku(id = "1")]

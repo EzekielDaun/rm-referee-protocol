@@ -12,7 +12,16 @@
     serde = { version = "1.0.228", default-features = false, features = [
         "alloc",
         "derive",
-    ] }
+    ], optional = true }
+
+[features]
+    default = ["serde"]
+    serde   = ["dep:serde"]
 
 [dev-dependencies]
     serde_json = "1.0"
+
+[[test]]
+    name              = "protocol_tests"
+    path              = "tests/protocol_tests.rs"
+    required-features = ["serde"]

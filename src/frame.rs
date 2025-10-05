@@ -1,5 +1,6 @@
 use crc::{Algorithm, Crc};
 use deku::{DekuContainerWrite, deku_derive};
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 use crate::RefereeFrameCmdData;
@@ -30,7 +31,8 @@ pub const RM_CRC16: Crc<u16> = Crc::<u16>::new(&Algorithm {
 pub const FRAME_SOF: u8 = 0xA5;
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(magic = b"\xA5", endian = "little")]
 pub struct RefereeFrameHeader {
     pub data_length: u16,
@@ -43,7 +45,8 @@ pub struct RefereeFrameHeader {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct RefereeFrame {
     #[deku(update = "Self::recompute_header_for_frame(self)")]
     pub header: RefereeFrameHeader,

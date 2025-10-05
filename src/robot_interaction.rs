@@ -1,9 +1,11 @@
 use deku::deku_derive;
+#[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 // 0x0301 子内容：哨兵自主决策指令（0x0120），位域结构（4 字节）
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct SentryCmd {
     #[deku(bits = 1)]
     pub confirm_revive: bool,
@@ -25,14 +27,16 @@ pub struct SentryCmd {
 
 // 0x0301 子内容：雷达自主决策指令（0x0121），单字节计数（1 字节）
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct RadarCmd {
     pub radar_cmd: u8,
 }
 
 // 0x0301 子内容：图形/图层相关类型
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8")]
 pub enum LayerDeleteType {
     #[deku(id = "0")]
@@ -44,14 +48,16 @@ pub enum LayerDeleteType {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct InteractionLayerDelete {
     pub delete_type: LayerDeleteType,
     pub layer: u8,
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8", bits = 3)]
 pub enum FigureOperateType {
     #[deku(id = "0")]
@@ -65,7 +71,8 @@ pub enum FigureOperateType {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8", bits = 3)]
 pub enum FigureType {
     #[deku(id = "0")]
@@ -87,7 +94,8 @@ pub enum FigureType {
 }
 
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u8", bits = 4)]
 pub enum FigureColor {
     #[deku(id = "0")]
@@ -112,7 +120,8 @@ pub enum FigureColor {
 
 // 单个图形（15 字节）：3 字节图形名 + 三段 32bit 位域
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct InteractionFigure {
     pub figure_name: [u8; 3],
     // 配置 1（32bit）
@@ -143,7 +152,8 @@ pub struct InteractionFigure {
 
 // 0x0301 子内容枚举：固定长度的内联为枚举
 #[deku_derive(DekuRead, DekuWrite)]
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[deku(id_type = "u16", ctx = "id: u16, len: usize")]
 pub enum RobotInteractionUserData {
     // 0x0100: 2 字节 删除图层
